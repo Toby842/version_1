@@ -4,6 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 
 ///Import other files:
 import 'package:version_1/globals.dart';
+import 'package:version_1/screens/anchor.dart';
 
 ///====================================================
 ///This displays the UI where the user can create the sandwich.
@@ -157,10 +158,20 @@ class _CreateSandwichState extends State<CreateSandwich> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.466,
               width: MediaQuery.of(context).size.width,
-              child: DragTarget<String>(
+              child: DragTarget<int>(
                 builder: (BuildContext context, List<dynamic> accepted,List<dynamic> rejected) {
-                  return const SizedBox();
-                }
+                  return ListView.builder(
+                    reverse: true,
+                    itemCount: newSandwich.length,
+                    itemBuilder: ((context, index) {
+                      return SandwichIngrediants(index_: newSandwich[index],);
+                    })
+                  );
+                },
+                onAccept: (int data) {
+                  newSandwich.add(data);
+                  setState(() {});
+                },
               ),
             ),
 
@@ -249,7 +260,13 @@ class _CreateSandwichState extends State<CreateSandwich> {
               width: MediaQuery.of(context).size.width * 0.5,
               child: FittedBox(
                 child: ElevatedButton(
-                  onPressed: (){}, 
+                  onPressed: (){
+                    print(newSandwich);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Anchor()));
+                  }, 
                   style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           side: const BorderSide(color: Colors.black87),
@@ -282,9 +299,9 @@ class DispenserIngredientsUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Draggable<String>(
+    return Draggable<int>(
       maxSimultaneousDrags: 1,
-      data: '',
+      data: index_,
 
 
       feedback: Container(
@@ -346,6 +363,45 @@ class DispenserIngredientsUI extends StatelessWidget {
             ),
           ),
         ),
+    );
+  }
+}
+
+
+///Widget for the Ingrediants that got dragged into the field
+class SandwichIngrediants extends StatelessWidget {
+  const SandwichIngrediants({super.key, required this.index_});
+
+  final int index_;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        side: BorderSide(
+          color: Colors.black87
+        )
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Text(
+              dispenserIngredients[index_],
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.025,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.005,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

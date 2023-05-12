@@ -42,14 +42,11 @@ dependencies:
   #The following adds Nuberpicker to the project. This library is needed for the user to pick a time where the sandwich should be ready
   numberpicker: ^2.1.2
 
-  #The following is needed to create the dispenser rotation animation
-  image_sequence_animator:
-    git:
-      url: 'https://github.com/papmodern/flutter-image-sequence-animator.git'
-      path: 'image_sequence_animator'
-
-  #dispenser rotation second try
+  #dispenser rotation animation
   imageview360: ^1.3.0
+
+  #Bluetooth connection
+  flutter_blue: ^0.8.0
 
 
 dev_dependencies:

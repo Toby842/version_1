@@ -69,7 +69,7 @@ class _StartScreenState extends State<StartScreen>{
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CreateSandwich()));
+                            builder: (context) => const CreateSandwich())); newSandwich.clear();
                   }, 
                   style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,

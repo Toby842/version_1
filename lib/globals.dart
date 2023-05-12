@@ -3,24 +3,32 @@
 
 library version_1.globals;
 
-//Strings
+import 'package:flutter/material.dart';
+
+//Strings======================================================================
 
 
-//Integers
+//Integers=====================================================================
 
 
-//Boolians
+//Boolians=====================================================================
+bool imagePrecached = false;
 
 
-//Lists
+
+//Lists========================================================================
 List<String> favourites = ['Salami', 'Käse'];
 
-List<String> dispenserIngredients = ['Salami', 'Brot', 'Ketchup', 'Tomaten'];
+List<String> dispenserIngredients = ['Empty', 'Empty', 'Empty', 'Empty'];
 
-//Maps
+List<ImageProvider> imageList = [];
+
+List<int> newSandwich = [];
+
+//Maps=========================================================================
 
 
-//Keys
+//Keys=========================================================================
 
 
-//Undefined
+//Undefined====================================================================

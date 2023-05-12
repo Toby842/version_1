@@ -1,11 +1,12 @@
 // @dart=2.9
 
-
 // Flutter Libraries that are imported in this file are listed here:
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 // Other Files of this Project that are imported in this file are listed here:
 import 'package:version_1/screens/anchor.dart';
+import 'package:version_1/screens/bluetooth_connection_page.dart';
 
 //======================================================================
 //This is the main function of the whole App.
@@ -29,6 +30,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      
+      ///there is an argument required!!!
       home: const Anchor(),
     );
   }
