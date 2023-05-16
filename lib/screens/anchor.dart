@@ -33,7 +33,7 @@ class _AnchorState extends State<Anchor> {
 
   ///It would be best to load the entire list when the app is launching. 
   void loadImages() async {
-    for (int i = 1; i <= 248; i++) {
+    for (int i = 248; i >= 1; i--) {
       imageList.add(AssetImage('assets/dispenserSequence/$i.png'));
       await precacheImage(AssetImage('assets/dispenserSequence/$i.png'), context);
     }
@@ -47,10 +47,10 @@ class _AnchorState extends State<Anchor> {
     imagePrecached == true 
     ? PageView(
       controller: _controller,
-      children: const [
-        DispenserInfo(),
-        StartScreen(),
-        Settings(), 
+      children: [
+        const DispenserInfo(),
+        const StartScreen(),
+        const Settings(), 
         BluetoothConnectPage(),
       ],
     )

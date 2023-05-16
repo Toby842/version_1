@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -15,9 +16,13 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
   BluetoothDevice? connectedDevice;
   bool isConnecting = false;
+  BluetoothCharacteristic? characteristic;
+  String sendData = "1 1 2 2";
 
   // Method to start scanning for devices
   void scanForDevices() {
+    //implement boolian that checks if app is already scanning
+    //otherwise you will get an error if the users changes screen and comes back again
     flutterBlue.startScan();
 
     // You can remove the timer that stops the scan after 4 seconds
@@ -30,15 +35,48 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
     try {
       await device.connect();
       setState(() {
-        connectedDevice = device;
         isConnecting = false;
       });
+      discoverServices();
+      print("discover Services triggered");
+      connectedDevice = device;
       // Do something with the connected device
     } catch (e) {
       setState(() {
         isConnecting = false;
       });
       // Handle the connection error
+    }
+  }
+
+  void discoverServices() async {
+    print("discover Services now");
+    if (connectedDevice != null) {
+      List<BluetoothService> services = await connectedDevice!.discoverServices();
+      services.forEach((service) {
+
+        if (service.uuid.toString() == "2F91CE50-053A-7D84-E5F4-34AB3A444B29") {
+          print("Passed first uuid");
+          service.characteristics.forEach((characteristic) {
+            if (characteristic.uuid.toString() == "00002a58-0000-1000-8000-00805f9b34fb") {
+              print("passed second uuid");
+              setState(() {
+                this.characteristic = characteristic;
+                print(characteristic);
+              });
+            }
+          });
+        }
+      });
+    }
+  }
+
+  void sendDataToBLE() async {
+    print("Sending Data");
+    if (characteristic != null) {
+      print("characteristics is not null");
+      List<int> bytes = utf8.encode(sendData);
+      await characteristic!.write(bytes);
     }
   }
 
@@ -106,10 +144,17 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
                           onTap: isConnecting
                               ? null
                               : () => _connectToDevice(device),
-                          trailing: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Send data'),
-                          ),
+                          trailing: 
+                          device == connectedDevice ? 
+                          ElevatedButton(
+                            onPressed: () {
+                              sendDataToBLE();
+                            },
+                            child: 
+                            const Text('Send data'),
+                          ) : const SizedBox(
+                            height: 1,
+                          )
                         );
                       },
                     );
