@@ -17,7 +17,7 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
   BluetoothDevice? connectedDevice;
   bool isConnecting = false;
   BluetoothCharacteristic? characteristic;
-  String sendData = "1 1 2 2";
+  String sendData = "Heyo";
 
   // Method to start scanning for devices
   void scanForDevices() {
@@ -28,18 +28,17 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
     // You can remove the timer that stops the scan after 4 seconds
   }
 
-  void _connectToDevice(BluetoothDevice device) async {
+  void _connectToDevice(BluetoothDevice device_) async {
+    connectedDevice = device_;
     setState(() {
       isConnecting = true;
     });
     try {
-      await device.connect();
+      await device_.connect();
       setState(() {
         isConnecting = false;
       });
       discoverServices();
-      print("discover Services triggered");
-      connectedDevice = device;
       // Do something with the connected device
     } catch (e) {
       setState(() {
@@ -50,16 +49,14 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
   }
 
   void discoverServices() async {
-    print("discover Services now");
     if (connectedDevice != null) {
       List<BluetoothService> services = await connectedDevice!.discoverServices();
       services.forEach((service) {
 
-        if (service.uuid.toString() == "2F91CE50-053A-7D84-E5F4-34AB3A444B29") {
-          print("Passed first uuid");
+        ///GATT Service UUID
+        if (service.uuid.toString() == "0000ffe0-0000-1000-8000-00805f9b34fb") {
           service.characteristics.forEach((characteristic) {
-            if (characteristic.uuid.toString() == "00002a58-0000-1000-8000-00805f9b34fb") {
-              print("passed second uuid");
+            if (characteristic.uuid.toString() == "0000ffe1-0000-1000-8000-00805f9b34fb") {
               setState(() {
                 this.characteristic = characteristic;
                 print(characteristic);
@@ -72,11 +69,9 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
   }
 
   void sendDataToBLE() async {
-    print("Sending Data");
     if (characteristic != null) {
-      print("characteristics is not null");
       List<int> bytes = utf8.encode(sendData);
-      await characteristic!.write(bytes);
+      await characteristic!.write(bytes, withoutResponse: true);
     }
   }
 
