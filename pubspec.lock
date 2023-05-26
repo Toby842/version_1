@@ -107,14 +107,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
-  infinite_listview:
+  intl:
     dependency: transitive
     description:
-      name: infinite_listview
-      sha256: f6062c1720eb59be553dfa6b89813d3e8dd2f054538445aaa5edaddfa5195ce6
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -155,14 +155,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
-  numberpicker:
-    dependency: "direct main"
-    description:
-      name: numberpicker
-      sha256: "4c129154944b0f6b133e693f8749c3f8bfb67c4d07ef9dcab48b595c22d1f156"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.2"
   path:
     dependency: transitive
     description:
@@ -171,6 +163,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.2"
+  percent_indicator:
+    dependency: "direct main"
+    description:
+      name: percent_indicator
+      sha256: c37099ad833a883c9d71782321cb65c3a848c21b6939b6185f0ff6640d05814c
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.3"
   protobuf:
     dependency: transitive
     description:
@@ -240,6 +240,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  time_picker_spinner_pop_up:
+    dependency: "direct main"
+    description:
+      name: time_picker_spinner_pop_up
+      sha256: cc7b7442b6318cef400c329430955d9203893cf4c55c6e28192240ca5bb8d8a6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   typed_data:
     dependency: transitive
     description:
@@ -258,4 +266,4 @@ packages:
     version: "2.1.4"
 sdks:
   dart: ">=2.19.5 <3.0.0"
-  flutter: ">=1.12.13+hotfix.6"
+  flutter: ">=2.12.0"

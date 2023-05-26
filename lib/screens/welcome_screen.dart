@@ -31,7 +31,7 @@ class _StartScreenState extends State<StartScreen>{
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xfff2f3f4),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -59,78 +59,64 @@ class _StartScreenState extends State<StartScreen>{
               width: MediaQuery.of(context).size.width,
             ),
 
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: FittedBox(
-                child: ElevatedButton(
-                  ///if the button is pressed, the screen will change to the New-Sandwich-Interface
-                  onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CreateSandwich())); newSandwich.clear();
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.black87),
-                        ),
-                  child: const Text(
-                    "New Sandwich",
-                    style: TextStyle(
-                      color: Colors.black87
-                    ),
-                  ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.04,
+              width: MediaQuery.of(context).size.width * 0.4,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: const Offset(2, 2),
+                  )
+                ],
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                color: const Color(0xffffffff)
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CreateSandwich())); 
+                      newSandwich.clear();
+                },
+                child: const Center(
+                  child: Text(
+                       "New Sandwich",
+                       style: TextStyle(
+                         color: Colors.black87,
+                         fontSize: 15,
+                         fontWeight: FontWeight.bold
+                       ),
+                     ),
                 ),
               ),
             ),
 
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.008,
-              width: MediaQuery.of(context).size.width,
-            ),
-
-            Container(
-              height: MediaQuery.of(context).size.height * 0.001,
-              width: MediaQuery.of(context).size.width * 0.9,
-              color: Colors.black87,
-            ),
-
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.01,
+              height: MediaQuery.of(context).size.height * 0.009,
               width: MediaQuery.of(context).size.width,
             ),
 
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-              SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                  child: const FittedBox(
-                    child: Text(
-                      "Favourites",
-                      style: TextStyle(
-                          color: Colors.black87,
-                      ),
-                    ),
-                  )),
-                ],
-              ),
-            ),
-
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.315,
+              height: MediaQuery.of(context).size.height * 0.255,
               width: MediaQuery.of(context).size.width * 0.8,
-              child: ListView.builder(
-                itemCount: favourites.length,
-                itemBuilder: ((context, index) {
-                  return FavouriteSandwiches(index_: index,);
-                })
+              child: Expanded(
+                child: GridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  children: List.generate(favourites.length, (index) {
+                    return FavouriteSandwiches(index_: index);
+                  })
+                ),
               ),
             ),
+
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.09,
+            )
         ], 
       ),
     );
@@ -146,28 +132,57 @@ class FavouriteSandwiches extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        side: BorderSide(
-          color: Colors.black87
-        )
+    return Container(
+      margin: const EdgeInsets.all(10),
+      height: MediaQuery.of(context).size.height * 0.15,
+      width: MediaQuery.of(context).size.height * 0.15,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 2,
+            offset: const Offset(2, 2),
+          )
+        ],
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
+        color: const Color(0xffffffff)
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Column(
           children: [
-            Text(
-              favourites[index_],
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.025,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.06,
+              child: ListTile(
+                leading: const Icon(
+                  Icons.star_outline_outlined,
+                  color: Colors.red,
+                ),
+                title: Transform.translate(
+                  offset: const Offset(-30, 0),
+                  child: Text(
+                    favourites[index_],
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.014,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87
+                    ),
+                  ),
+                ),
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.005,
+              height: MediaQuery.of(context).size.height * 0.09 - 20,
+              child: Center(
+                child: Text(
+                  'what to show?',
+                  style: TextStyle(
+                    color: Colors.grey.withOpacity(1),
+                    fontSize: 10,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

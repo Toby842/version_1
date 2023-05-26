@@ -1,6 +1,5 @@
 //Import the flutter libraries:
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 
 //Import other files:
 import 'package:version_1/screens/settings.dart';
@@ -47,11 +46,11 @@ class _AnchorState extends State<Anchor> {
     imagePrecached == true 
     ? PageView(
       controller: _controller,
-      children: [
-        const DispenserInfo(),
-        const StartScreen(),
-        const Settings(), 
-        BluetoothConnectPage(),
+      children: const [
+        DispenserInfo(),
+        StartScreen(),
+        Settings(), 
+        //BluetoothConnectPage(),
       ],
     )
     : const Scaffold(

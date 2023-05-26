@@ -1,6 +1,8 @@
 ///Import flutter libraries:
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
+import 'dart:convert';
 
 ///Import other files:
 import 'package:version_1/globals.dart';
@@ -20,75 +22,14 @@ class CreateSandwich extends StatefulWidget {
 
 class _CreateSandwichState extends State<CreateSandwich> {
 
-  ///function that opens a small window where the user can input the time that should pass, until the sandwich is made
-  setTime() {
-    showDialog(
-      context: context, 
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: StatefulBuilder(
-            // ignore: non_constant_identifier_names
-            builder: (context, SBsetState) {
-              return Column(
-                 mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Prepare in:",
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: MediaQuery.of(context).size.height * 0.04,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      children: [
-                        ///Hours
-                        NumberPicker(
-                          minValue: 00,
-                          maxValue: 23,
-                          value: 0,
-                          onChanged: (value) {
-                            setState(() {});
-                            SBsetState(
-                              () {},
-                            );
-                          }),
+  bool isFavourite = false;
+  final _textEditingController = TextEditingController();
 
-                        ///Minutes
-                        NumberPicker(
-                          minValue: 00,
-                          maxValue: 60,
-                          value: 0,
-                          onChanged: (value) {
-                            setState(() {});
-                            SBsetState(
-                              () {},
-                            );
-                          }),
-                      ]
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Text('Hours / Week'),
-                        const Spacer(),
-                        ElevatedButton(
-                          onPressed: () {}, 
-                          child: const Text('save')
-                        )
-                      ],
-                    )
-                  ]
-              );
-            },
-          ),
-        );
-      }
-    );
+  deleteItem(int deleteItem) {
+    setState(() {
+      newSandwich.removeAt(deleteItem);
+    });
   }
 
 
@@ -97,7 +38,8 @@ class _CreateSandwichState extends State<CreateSandwich> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color(0xfff2f3f4),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -122,23 +64,12 @@ class _CreateSandwichState extends State<CreateSandwich> {
             //0.88 downwards
 
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.03,
-              width: MediaQuery.of(context).size.width,
-            ),
-
-            Container(
-              height: MediaQuery.of(context).size.height * 0.001,
-              width: MediaQuery.of(context).size.width * 0.9,
-              color: Colors.black87,
-            ),
-
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.004,
+              height: MediaQuery.of(context).size.height * 0.02,
               width: MediaQuery.of(context).size.width,
             ),
 
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: MediaQuery.of(context).size.height * 0.065,
               width: MediaQuery.of(context).size.height * 0.9,
               child: Padding(
                 padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.001),
@@ -164,7 +95,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                     reverse: true,
                     itemCount: newSandwich.length,
                     itemBuilder: ((context, index) {
-                      return SandwichIngrediants(index_: newSandwich[index],);
+                      return SandwichIngrediants(index_: newSandwich[index], indexList: index, function: deleteItem,);
                     })
                   );
                 },
@@ -176,16 +107,23 @@ class _CreateSandwichState extends State<CreateSandwich> {
             ),
 
             Container(
-              height: MediaQuery.of(context).size.height * 0.001,
+              height: MediaQuery.of(context).size.height * 0.101,
               width: MediaQuery.of(context).size.width * 0.9,
-              color: Colors.black87,
-            ),
-
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                //border: Border.all(color: Colors.black87),
+                color: const Color(0xffffffff),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: const Offset(2, 2),
+                  )
+                ]
+              ),
               child: Padding(
-                padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.001),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -197,92 +135,129 @@ class _CreateSandwichState extends State<CreateSandwich> {
                       ),
                     ),
                     const Spacer(),
-                    ElevatedButton(
-                      onPressed: (){setTime();},
-                      child: const Text(
-                        '19h:30min',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
+                    TimePickerSpinnerPopUp(
+                      mode: CupertinoDatePickerMode.time,
+                      initTime: DateTime.now(),
+                      onChange: (DateTime) {},
                     )
                   ],
                 ),
               ),
             ),
 
-            Container(
-              height: MediaQuery.of(context).size.height * 0.001,
-              width: MediaQuery.of(context).size.width * 0.9,
-              color: Colors.black87,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.014,
+              width: MediaQuery.of(context).size.width,
             ),
 
-            SizedBox(
-            height: MediaQuery.of(context).size.height * 0.008,
-            width: MediaQuery.of(context).size.width,
-          ),
-
-          SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
+            Container(
+              height: MediaQuery.of(context).size.height * 0.159,
               width: MediaQuery.of(context).size.width * 0.9,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-                child: const Icon(
-                  Icons.star_border_outlined,
-                  color: Colors.black87,
-                ),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                color: const Color(0xffffffff),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: const Offset(2, 2),
+                  )
+                ]
               ),
-              SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                  child: const FittedBox(
-                    child: Text(
-                      "Make it a favourite",
-                      style: TextStyle(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    child: ListTile(
+                      leading: InkWell(
+                        onTap: () {
+                          if (isFavourite == false) {
+                            isFavourite = true;
+                          } else {
+                            isFavourite = false;
+                          }
+                          setState(() {});
+                        },
+                        child: (isFavourite == false) 
+                        ? const Icon(
+                          Icons.star_border_outlined,
                           color: Colors.black87,
+                        ) 
+                        : const Icon(
+                          Icons.star_border_outlined,
+                          color: Colors.red,
+                        ),
+                      ),
+
+                      title: Transform.translate(
+                        offset: const Offset(-30, 0),
+                        child: const Text(
+                          'Make it a favourite',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 12
+                          ),
+                        ),
                       ),
                     ),
-                  )),
+                  ),
+
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: (isFavourite == true) 
+                    ? TextField(
+                      controller: _textEditingController,
+                        cursorColor: Colors.black87,
+                        decoration: const InputDecoration(
+                          labelText: 'name your sandwich',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black87),
+                          ),
+                        ),
+                        onSubmitted: (value) {
+                        },
+                    ) 
+                    : SizedBox(),
+                  ),
+
+                  const Spacer(),
+
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 10, bottom: 10),
+                      child: InkWell(
+                        onTap: () async {
+                          print(newSandwich);
+                          if (characteristicGloabl != null) {
+                            List<int> bytes = utf8.encode(newSandwich.toString());
+                            await characteristicGloabl!.write(bytes, withoutResponse: true);
+                          }
+                          // ignore: use_build_context_synchronously
+                          Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                             builder: (context) => const Anchor()));
+                        },
+                        child: const Text(
+                          'Create'
+                        ),
+                      ),
+                    ),
+                  )
+
                 ],
               ),
             ),
 
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.134,
-              width: MediaQuery.of(context).size.width,
-            ),
-
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: FittedBox(
-                child: ElevatedButton(
-                  onPressed: (){
-                    print(newSandwich);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Anchor()));
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.black87),
-                        ),
-                  child: const Text(
-                    "Make my Sandwich",
-                    style: TextStyle(
-                      color: Colors.black87
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.015,
+              height: MediaQuery.of(context).size.height * 0.055,
               width: MediaQuery.of(context).size.width,
             )
         ],
@@ -303,26 +278,13 @@ class DispenserIngredientsUI extends StatelessWidget {
       maxSimultaneousDrags: 1,
       data: index_,
 
-
-      feedback: Container(
-          margin: const EdgeInsets.only(left: 10, right: 10),
-          height: MediaQuery.of(context).size.height * 0.05,
-          width: MediaQuery.of(context).size.width * 0.18,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
-            border: Border.all(color: Colors.black87),
-          ),
-          child: Center(
-            child: Text(
-              dispenserIngredients[index_],
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: MediaQuery.of(context).size.height * 0.01,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-          ),
-      ),
+      feedback: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.08,
+      child: Image.asset(
+            ingrediantSettings[index_ + 1],
+            fit: BoxFit.contain,
+          )
+    ),
 
       childWhenDragging: Container(
           margin: const EdgeInsets.only(left: 10, right: 10),
@@ -345,12 +307,21 @@ class DispenserIngredientsUI extends StatelessWidget {
       ),
 
       child: Container(
-          margin: const EdgeInsets.only(left: 10, right: 10),
+          margin: const EdgeInsets.all(10),
           height: MediaQuery.of(context).size.height * 0.05,
           width: MediaQuery.of(context).size.width * 0.18,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(15)),
-            border: Border.all(color: Colors.black87),
+            //border: Border.all(color: Colors.black87),
+            color: const Color(0xffffffff),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: const Offset(2, 2),
+              )
+            ]
           ),
           child: Center(
             child: Text(
@@ -370,37 +341,28 @@ class DispenserIngredientsUI extends StatelessWidget {
 
 ///Widget for the Ingrediants that got dragged into the field
 class SandwichIngrediants extends StatelessWidget {
-  const SandwichIngrediants({super.key, required this.index_});
+  const SandwichIngrediants({super.key, required this.index_, required this.indexList, required this.function});
 
+  //Index for recognizing what dispenser is meant with the number
   final int index_;
+  //Index in the newSandwich-List
+  final int indexList;
+  final Function function;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        side: BorderSide(
-          color: Colors.black87
-        )
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Text(
-              dispenserIngredients[index_],
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.025,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87
-              ),
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        function(indexList);
+      },
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.1,
+        child: Image.asset(
+              ingrediantSettings[index_ + 1],
+              fit: BoxFit.contain,
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.005,
-            ),
-          ],
-        ),
       ),
     );
   }
