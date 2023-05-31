@@ -51,6 +51,9 @@ dependencies:
   #percentage indicator
   percent_indicator: ^4.2.3
 
+  #string_validator
+  string_validator: ^1.0.0
+
 
 dev_dependencies:
   flutter_test:
