@@ -23,10 +23,11 @@ bool startedScanning = false;
 
 
 //Lists========================================================================
-///
+///this must stored
 List<String> favourites = ['Salami', 'Käse', 'something', 'sth else'];
 
 ///this is where names are stored. The user setts the names except bread
+///this must be stored
 List<String> dispenserIngredients = ['Bread', 'Empty', 'Empty', 'Empty'];
 
 ///this is the list where all the images for the dispenser-rotation-animation
@@ -51,6 +52,7 @@ List<String> imageLibrary = [
 
 //Maps=========================================================================
 ///This map holds the current image for each dispenser that the user selected
+///This must be stored
 Map<int, dynamic> ingrediantSettings = {
   1: 'assets/ingredients/toast.png',
   2: 'assets/ingredients/sauce1.png',
@@ -59,6 +61,7 @@ Map<int, dynamic> ingrediantSettings = {
 };
 
 ///this map stores the current fill-level for each dispenser
+///this must be stored
 Map<int, dynamic> fillStand = {
   ///Dispenser one is meassured in pieces (BREAD)
   1: 0,

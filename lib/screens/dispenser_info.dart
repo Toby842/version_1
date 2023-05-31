@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:imageview360/imageview360.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:string_validator/string_validator.dart';
 
 //Import other files:
 import 'package:version_1/globals.dart';
@@ -363,7 +364,6 @@ class _DispenserContentState extends State<DispenserContent> {
 
                       ListTile(
                         title: TextField(
-                          keyboardType: TextInputType.number,
                           controller: _textEditingController2,
                           cursorColor: Colors.black87,
                           decoration: InputDecoration(
@@ -377,10 +377,10 @@ class _DispenserContentState extends State<DispenserContent> {
                             ),
                         ),
                         onSubmitted: (value) {
-                          if (value != '') {
+                          if (value != '' && isNumeric(value)) {
                             fillStand[widget.number] = int.parse(value);
                           } else {
-                            fillStand[widget.number] = 0;
+                            fillStand[widget.number] = fillStand[widget.number];
                           }
                           setState(() {});
                           Navigator.of(context).pop();

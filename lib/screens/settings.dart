@@ -57,10 +57,12 @@ class _SettingsState extends State<Settings> {
   void discoverServices() async {
     if (connectedDevice != null) {
       List<BluetoothService> services = await connectedDevice!.discoverServices();
+      // ignore: avoid_function_literals_in_foreach_calls
       services.forEach((service) {
 
         ///GATT Service UUID
         if (service.uuid.toString() == "0000ffe0-0000-1000-8000-00805f9b34fb") {
+          // ignore: avoid_function_literals_in_foreach_calls
           service.characteristics.forEach((characteristic) {
             if (characteristic.uuid.toString() == "0000ffe1-0000-1000-8000-00805f9b34fb") {
               setState(() {
@@ -165,8 +167,8 @@ class _SettingsState extends State<Settings> {
                   case ConnectionState.active:
                     final devices = snapshot.data
                             ?.map((result) => result.device)
-                            ?.where((device) => device.name.isNotEmpty)
-                            ?.toList() ??
+                            .where((device) => device.name.isNotEmpty)
+                            .toList() ??
                         [];
                     return ListView.builder(
                       itemCount: devices.length,

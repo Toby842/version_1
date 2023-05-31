@@ -6,7 +6,6 @@ import 'package:version_1/screens/settings.dart';
 import 'package:version_1/screens/dispenser_info.dart';
 import 'package:version_1/screens/welcome_screen.dart';
 import 'package:version_1/globals.dart';
-import 'bluetooth_connection_page.dart';
 
 //=================================================================
 //Anchor is the anchor for the three front pages
@@ -50,7 +49,6 @@ class _AnchorState extends State<Anchor> {
         DispenserInfo(),
         StartScreen(),
         Settings(), 
-        //BluetoothConnectPage(),
       ],
     )
     : const Scaffold(

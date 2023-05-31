@@ -138,7 +138,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                     TimePickerSpinnerPopUp(
                       mode: CupertinoDatePickerMode.time,
                       initTime: DateTime.now(),
-                      onChange: (DateTime) {},
+                      onChange: (dateTime) {},
                     )
                   ],
                 ),
@@ -238,7 +238,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                           // ignore: unnecessary_null_comparison
                           if (characteristicGloabl != null) {
                             List<int> bytes = utf8.encode(newSandwich.toString());
-                            await characteristicGloabl!.write(bytes, withoutResponse: true);
+                            await characteristicGloabl.write(bytes, withoutResponse: true);
                           }
                           // ignore: use_build_context_synchronously
                           Navigator.push(
