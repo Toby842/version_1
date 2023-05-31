@@ -151,7 +151,6 @@ class _SettingsState extends State<Settings> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.841,
             width: MediaQuery.of(context).size.width,
-            child: Expanded(
             child: StreamBuilder<List<ScanResult>>(
               stream: flutterBlue.scanResults,
               builder: (context, snapshot) {
@@ -236,7 +235,6 @@ class _SettingsState extends State<Settings> {
                 }
               },
             ),
-          ),
           ),
 
         ],

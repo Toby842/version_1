@@ -103,14 +103,12 @@ class _StartScreenState extends State<StartScreen>{
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.255,
               width: MediaQuery.of(context).size.width * 0.8,
-              child: Expanded(
-                child: GridView.count(
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  children: List.generate(favourites.length, (index) {
-                    return FavouriteSandwiches(index_: index);
-                  })
-                ),
+              child: GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 2,
+                children: List.generate(favourites.length, (index) {
+                  return FavouriteSandwiches(index_: index);
+                })
               ),
             ),
 

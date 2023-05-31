@@ -223,7 +223,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                         onSubmitted: (value) {
                         },
                     ) 
-                    : SizedBox(),
+                    : const SizedBox(),
                   ),
 
                   const Spacer(),
@@ -235,6 +235,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                       child: InkWell(
                         onTap: () async {
                           print(newSandwich);
+                          // ignore: unnecessary_null_comparison
                           if (characteristicGloabl != null) {
                             List<int> bytes = utf8.encode(newSandwich.toString());
                             await characteristicGloabl!.write(bytes, withoutResponse: true);

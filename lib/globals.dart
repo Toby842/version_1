@@ -91,5 +91,5 @@ Map<int, dynamic> fillRefference = {
 
 
 //Undefined====================================================================
-BluetoothDevice? connectedDeviceGlobal;
-BluetoothCharacteristic? characteristicGloabl;
+late BluetoothDevice connectedDeviceGlobal;
+late BluetoothCharacteristic characteristicGloabl;
