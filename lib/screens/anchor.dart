@@ -15,7 +15,6 @@ import 'package:version_1/globals.dart';
 class Anchor extends StatefulWidget {
   const Anchor({super.key, });
 
-
   @override
   State<Anchor> createState() => _AnchorState(); 
 }
@@ -25,11 +24,12 @@ class _AnchorState extends State<Anchor> {
 
   @override
   void initState(){
+    ///images for the rotation animation must be loaded and stored.
     WidgetsBinding.instance.addPostFrameCallback((_) {loadImages(); });
     super.initState();
   }
 
-  ///It would be best to load the entire list when the app is launching. 
+  ///It would be best to load the entire list when the app is launching. That is what´s happening here
   void loadImages() async {
     for (int i = 248; i >= 1; i--) {
       imageList.add(AssetImage('assets/dispenserSequence/$i.png'));
@@ -39,10 +39,15 @@ class _AnchorState extends State<Anchor> {
     setState(() {});
   }
 
+  ///TODO:
+  ///every data that is stored needs to be fetched here.
+
   @override
   Widget build(BuildContext context) {
     return 
     imagePrecached == true 
+
+    ///if everything is fetched, the app can launch
     ? PageView(
       controller: _controller,
       children: const [
@@ -51,8 +56,10 @@ class _AnchorState extends State<Anchor> {
         Settings(), 
       ],
     )
+
+    ///if there is still data missing, the app will not launch
     : const Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xfff2f3f4),
     )
     ;
   }

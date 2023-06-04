@@ -28,7 +28,10 @@ class _DispenserInfoState extends State<DispenserInfo> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      ///that prevents a pixel-overflow when the keyboard appears. 
       resizeToAvoidBottomInset: false,
+
       backgroundColor: const Color(0xfff2f3f4),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -59,14 +62,15 @@ class _DispenserInfoState extends State<DispenserInfo> with TickerProviderStateM
             ],
           ),
 
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.528 - 30,
-              width: MediaQuery.of(context).size.width,
-
-              child: Center(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  width: MediaQuery.of(context).size.height * 0.4,
+          ///The Rotation Animation
+          ///this is, where the user can swipe through the dispensers of the robot. 
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.528 - 30,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                width: MediaQuery.of(context).size.height * 0.4,
                   child: FittedBox(
                     child: imagePrecached == true 
                     ? ImageView360(
@@ -98,13 +102,10 @@ class _DispenserInfoState extends State<DispenserInfo> with TickerProviderStateM
               )
             ),
 
+            ///this is where the dispenser-info of each dispenser is shown. 
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.352 + 30,
               width: MediaQuery.of(context).size.width,
-              // decoration: const BoxDecoration(
-              //   color: Colors.black87,
-              //   borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-              // ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -480,14 +481,27 @@ class _DispenserContentState extends State<DispenserContent> {
         onTap: () {
           changeImage();
         },
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.199,
-          child: Image.asset(
-            ingrediantSettings[widget.number],
-            fit: BoxFit.contain,
-          ),
+        child: fillStand[widget.number] != 0 && dispenserIngredients[widget.number - 1] != 'Empty'
+        ? SizedBox(
+            height: MediaQuery.of(context).size.height * 0.199,
+            child: Image.asset(
+              ingrediantSettings[widget.number],
+              fit: BoxFit.contain,
+            ),
+          )
+        : SizedBox(
+            height: MediaQuery.of(context).size.height * 0.199,
+            child: Stack(
+              children: [
+                Image.asset(
+                  ingrediantSettings[widget.number],
+                  fit: BoxFit.contain,
+                  color: Colors.grey.withOpacity(0.4),
+                ),
+              ],
+            ),
+          )
         ),
-      ),
         ],
       ),
     );

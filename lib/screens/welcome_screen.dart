@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 //Import other Files
 import 'package:version_1/globals.dart';
 import 'package:version_1/screens/create_sandwich.dart';
+import 'package:version_1/screens/favourite_sandwich.dart';
+
 
 //======================================================================
 //This builds the screen that is seen first when the App starts. 
@@ -26,6 +28,10 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen>{
+
+  updateWelcomeScreen() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +82,48 @@ class _StartScreenState extends State<StartScreen>{
               ),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
+                  if (fillStand[1] != 0) {
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const CreateSandwich())); 
                       newSandwich.clear();
+                      newSandwich.add(0);
+                      fillStandCopy = Map.from(fillStand);
+                      fillStandCopy[1] = fillStandCopy[1] - 1;
+                      prepareIn = '0030';
+                  } else {
+                    showDialog(
+                      context: context, 
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: Center(
+                              child: RichText(
+                                text: const TextSpan(
+                                  text: 'WARNING: ',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'The bread dispenser is empty.',
+                                      style: TextStyle(
+                                        color: Colors.black87
+                                      )
+                                    )
+                                  ]
+                                ),
+                              ),
+                            ),
+                          )
+                        ); 
+                      }
+                    );
+                  }
                 },
                 child: const Center(
                   child: Text(
@@ -107,7 +150,7 @@ class _StartScreenState extends State<StartScreen>{
                 shrinkWrap: true,
                 crossAxisCount: 2,
                 children: List.generate(favourites.length, (index) {
-                  return FavouriteSandwiches(index_: index);
+                  return FavouriteSandwiches(index_: index, function: updateWelcomeScreen,);
                 })
               ),
             ),
@@ -124,9 +167,10 @@ class _StartScreenState extends State<StartScreen>{
 
 ///Widget that builds the Graphics for favourite Sandwiches, that were already created
 class FavouriteSandwiches extends StatelessWidget {
-  const FavouriteSandwiches({super.key, required this.index_});
+  const FavouriteSandwiches({super.key, required this.index_, required this.function});
 
   final int index_;
+  final Function function;
 
   @override
   Widget build(BuildContext context) {
@@ -170,14 +214,21 @@ class FavouriteSandwiches extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.09 - 20,
-              child: Center(
-                child: Text(
-                  'what to show?',
-                  style: TextStyle(
-                    color: Colors.grey.withOpacity(1),
-                    fontSize: 10,
+            InkWell(
+              onTap: () {
+                prepareIn = '0030';
+                fillStandCopy = Map.from(fillStand);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FavouriteSandwichesStored(favouriteName: favourites[index_], favouriteIndex: index_, favouriteList: favouritesData[favourites[index_]], function: function,)));
+              },
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.09 - 20,
+                child: Center(
+                  child: Image.asset(
+                    'assets/icons/sandwich.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),

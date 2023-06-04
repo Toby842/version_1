@@ -68,6 +68,7 @@ class _SettingsState extends State<Settings> {
               setState(() {
                 this.characteristic = characteristic;
                 characteristicGloabl = characteristic;
+                isConnected = true;
               });
             }
           });

@@ -7,7 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 //Strings======================================================================
+///string for selected time
+String prepareIn = '0030';
 
+///string for fillstands of sauce-dispensers. Just for working with it
+///they don´t have to be stored.
+String fillStandSauce1 = '00';
+String fillStandSauce2 = '00';
 
 //Integers=====================================================================
 
@@ -20,11 +26,14 @@ bool imagePrecached = false;
 ///checks if a bluetooth-scan was already started
 bool startedScanning = false;
 
+///checks if a bluetooth device is connected
+bool isConnected = false;
+
 
 
 //Lists========================================================================
 ///this must stored
-List<String> favourites = ['Salami', 'Käse', 'something', 'sth else'];
+List<String> favourites = ['Salami', 'Käse'];
 
 ///this is where names are stored. The user setts the names except bread
 ///this must be stored
@@ -73,6 +82,9 @@ Map<int, dynamic> fillStand = {
   4: 0,
 };
 
+///copy for keeping fillstand up to date while creating a sandwich
+Map<int, dynamic> fillStandCopy = {};
+
 ///this map holds the refference values for the fill-levels in String-format and int-format
 Map<int, dynamic> fillRefference = {
   ///Dispenser one is meassured in pieces (BREAD)
@@ -87,6 +99,12 @@ Map<int, dynamic> fillRefference = {
   ///Dispenser four is meassured in pieces (CHEESE)
   4: '8 pieces',
   44: 8,
+};
+
+///Map for favourite sandwiches
+Map<String, dynamic> favouritesData = {
+  'Salami': [0, 1, 3, 1, 0],
+  'Käse': [0, 2, 1, 0, 3, 2, 0],
 };
 
 
