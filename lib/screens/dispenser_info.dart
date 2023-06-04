@@ -12,6 +12,9 @@ import 'package:version_1/globals.dart';
 //The user can see all information about the fill-level, what´s in the dispensers and so on
 //================================================================
 
+///TODO:
+///Add dispenser nr. 5: Sauce Dispenser 2. 
+
 class DispenserInfo extends StatefulWidget {
   const DispenserInfo({super.key});
 

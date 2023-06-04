@@ -267,14 +267,14 @@ class _CreateSandwichState extends State<CreateSandwich> {
                               favouritesData[_textEditingController.text] = newSandwich;
                             }
 
-                            fillStandSauce1 = fillStandCopy[2].padLeft(2, '0').toString();
+                            fillStandSauce1 = fillStandCopy[2].toString().padLeft(2, '0');
                             //implement for Sauce2 dispenser
 
                             fillStand = Map.from(fillStandCopy);
                             for (int i = 0; i < newSandwich.length; i++) {
                               newSandwich[i] = newSandwich[i] + 1;
                             }
-                            for (int j = newSandwich.length - 1; j < 10; j++) {
+                            for (int j = newSandwich.length - 1; j < 9; j++) {
                               newSandwich.add(0);
                             }
                             List<int> bytes = utf8.encode(newSandwich.join("") + prepareIn);

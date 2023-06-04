@@ -210,7 +210,7 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                           // ignore: unnecessary_null_comparison
                           if (isConnected == true && newSandwich[0] == 0 && fillStandsOkay == true) {
 
-                            fillStandSauce1 = fillStandCopy[2].padLeft(2, '0').toString();
+                            fillStandSauce1 = fillStandCopy[2].toString().padLeft(2, '0');
                             //implement for Sauce2 dispenser
 
                             fillStand = Map.from(fillStandCopy);
