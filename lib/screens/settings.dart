@@ -1,7 +1,6 @@
 //Import Flutter libraries:
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'dart:convert';
 
 //other files:
 import 'package:version_1/globals.dart';
@@ -13,7 +12,9 @@ import 'package:version_1/globals.dart';
 //========================================================================
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  const Settings({super.key, required this.function});
+
+  final Function function;
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -24,7 +25,6 @@ class _SettingsState extends State<Settings> {
   BluetoothDevice? connectedDevice;
   bool isConnecting = false;
   BluetoothCharacteristic? characteristic;
-  String sendData = "Heyo";
 
   // Method to start scanning for devices
   void scanForDevices() {
@@ -77,13 +77,6 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  void sendDataToBLE() async {
-    if (characteristic != null) {
-      List<int> bytes = utf8.encode(sendData);
-      await characteristic!.write(bytes, withoutResponse: true);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -114,14 +107,22 @@ class _SettingsState extends State<Settings> {
               ),
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
-                  child: const FittedBox(
-                    child: Text(
+                  child: FittedBox(
+                    child: (language == 'English') 
+                    ? const Text(
                       "Settings",
                       style: TextStyle(
                           color: Colors.black87,
                           fontWeight: FontWeight.bold,
                       ),
-                    ),
+                    )
+                    : const Text(
+                      "Einstellungen",
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                      ),
+                    )
                   )),
             ],
           ),
@@ -152,7 +153,7 @@ class _SettingsState extends State<Settings> {
             ),
 
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.841,
+            height: MediaQuery.of(context).size.height * 0.691,
             width: MediaQuery.of(context).size.width,
             child: StreamBuilder<List<ScanResult>>(
               stream: flutterBlue.scanResults,
@@ -205,17 +206,6 @@ class _SettingsState extends State<Settings> {
                             onTap: isConnecting
                                 ? null
                                 : () => _connectToDevice(device),
-                            // trailing: 
-                            // device == connectedDevice ? 
-                            // ElevatedButton(
-                            //   onPressed: () {
-                            //     sendDataToBLE();
-                            //   },
-                            //   child: 
-                            //   const Text('Send data'),
-                            // ) : const SizedBox(
-                            //   height: 1,
-                            // )
                           )
                           : ListTile(
                             title: Text(
@@ -239,6 +229,109 @@ class _SettingsState extends State<Settings> {
               },
             ),
           ),
+
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.15,
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                    child: FittedBox(
+                      child: (language == 'English') 
+                      ? const Text(
+                        "Language: ",
+                        style: TextStyle(
+                            color: Colors.black87,
+                        ),
+                      )
+                      : const Text(
+                        "Sprache: ",
+                        style: TextStyle(
+                            color: Colors.black87,
+                        ),
+                      )
+                    )
+                  ),
+
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
+
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context, 
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: (language == 'English') 
+                            ? const Text(
+                              "Language:",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold),
+                            )
+                            : const Text(
+                              "Sprache:",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  child: InkWell(
+                                    onTap: () {
+                                      language = 'English';
+                                      setState(() {
+                                        widget.function();
+                                        Navigator.of(context).pop();
+                                      });
+                                    },
+                                    child: const Text('English'),
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  child: InkWell(
+                                    onTap: () {
+                                      language = 'Deutsch';
+                                      setState(() {
+                                        widget.function();
+                                        Navigator.of(context).pop();
+                                      });
+                                    },
+                                    child: const Text('Deutsch'),
+                                  ),
+                                )
+                              ],
+                            )
+                          );
+                        }
+                      );
+                    },
+                    child: Text(
+                      language,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+
+                  const Spacer(),
+                ],
+              ),
+            ),
+          )
 
         ],
       ),

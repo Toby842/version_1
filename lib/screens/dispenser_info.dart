@@ -11,21 +11,29 @@ import 'package:version_1/globals.dart';
 //DispenserInfo is the function for the screen that shows the dispenser information.
 //The user can see all information about the fill-level, what´s in the dispensers and so on
 //================================================================
-
-///TODO:
-///Add dispenser nr. 5: Sauce Dispenser 2. 
+ 
 
 class DispenserInfo extends StatefulWidget {
-  const DispenserInfo({super.key});
+  const DispenserInfo({ required Key key}) : super(key: key);
 
   @override
-  State<DispenserInfo> createState() => _DispenserInfoState();
+  // ignore: no_logic_in_create_state
+  State<DispenserInfo> createState() => DispenserInfoState();
 }
 
-class _DispenserInfoState extends State<DispenserInfo> with TickerProviderStateMixin{
+class DispenserInfoState extends State<DispenserInfo> with TickerProviderStateMixin{
   
   ///PageController for DispenserIngrediants
-  final PageController _controller = PageController(initialPage: 0);
+  final PageController _controller = PageController(initialPage: 4);
+
+
+  @override void initState() {
+    super.initState();
+  }
+
+  methodA() {
+    setState(() {});
+  }
 
 
   @override
@@ -85,17 +93,20 @@ class _DispenserInfoState extends State<DispenserInfo> with TickerProviderStateM
                         rotationDirection: RotationDirection.anticlockwise,
                         allowSwipeToRotate: true,
                         onImageIndexChanged: (currentImageIndex) {
-                          if (218 <= currentImageIndex! || currentImageIndex <= 31) {
-                            _controller.animateToPage(0, duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
+                          if (235 <= currentImageIndex! || currentImageIndex <= 59) {
+                            _controller.animateToPage(4, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
                           }
-                          if (32 <= currentImageIndex && currentImageIndex <= 93) {
-                            _controller.animateToPage(1, duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
+                          if (60 <= currentImageIndex && currentImageIndex <= 129) {
+                            _controller.animateToPage(3, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
                           }
-                          if (94 <= currentImageIndex && currentImageIndex <= 155) {
-                            _controller.animateToPage(2, duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
+                          if (130 <= currentImageIndex && currentImageIndex <= 179) {
+                            _controller.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
                           }
-                          if (156 <= currentImageIndex && currentImageIndex <= 217) {
-                            _controller.animateToPage(3, duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
+                          if (180 <= currentImageIndex && currentImageIndex <= 209) {
+                            _controller.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                          }
+                          if (210 <= currentImageIndex && currentImageIndex <= 234) {
+                            _controller.animateToPage(0, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
                           }
                         },
                       ) 
@@ -118,11 +129,12 @@ class _DispenserInfoState extends State<DispenserInfo> with TickerProviderStateM
                     child: PageView(
                       controller: _controller,
                       physics: const NeverScrollableScrollPhysics(),
-                      children: const [
-                        DispenserContent(number: 1, typ: 'bread', editable: false,),
-                        DispenserContent(number: 2, typ: 'sauce', editable: true,),
-                        DispenserContent(number: 3, typ: 'slicer', editable: true,),
-                        DispenserContent(number: 4, typ: 'cheese', editable: true,),
+                      children: [
+                        DispenserContent(number: 2,  editable: true,),
+                        DispenserContent(number: 3,  editable: true,),
+                        DispenserContent(number: 4,  editable: true,),
+                        DispenserContent(number: 5,  editable: true,),
+                        DispenserContent(number: 1,  editable: false,),
                       ],
                     ),
                   ),
@@ -147,12 +159,10 @@ class DispenserContent extends StatefulWidget {
   const DispenserContent({
     super.key, 
     required this.number,
-    required this.typ,
     required this.editable,
   });
 
   final int number;
-  final String typ;
   final bool editable;
 
   @override
@@ -170,6 +180,10 @@ class _DispenserContentState extends State<DispenserContent> {
     super.dispose();
   }
 
+  void updater() {
+    setState(() {});
+  }
+
   ///function for changing the name of the ingredient
   void changeIngrediant() {
     if (widget.editable == true) {
@@ -178,61 +192,69 @@ class _DispenserContentState extends State<DispenserContent> {
         context: context, 
         builder: (BuildContext context) {
           return AlertDialog(
-            content: StatefulBuilder(
-              // ignore: non_constant_identifier_names
-              builder: (context, SBsetState) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        horizontalTitleGap: 0,
-                        title: const Text(
-                          "Ingredient:",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          "${widget.typ}-dispenser",
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 16
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                
-                      TextField(
-                        controller: _textEditingController,
-                        cursorColor: Colors.black87,
-                        decoration: const InputDecoration(
-                          labelText: 'Ingredient...',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black87),
-                          ),
-                        ),
-                        onSubmitted: (value) {
-                          if (value != '') {
-                            dispenserIngredients[widget.number - 1] = value;
-                          } else {
-                            dispenserIngredients[widget.number - 1] = 'Empty';
-                          }
-                          setState(() {});
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ]
-                );
+
+            title: ListTile(
+              horizontalTitleGap: 0,
+              title: (language == 'English')
+              ? const Text(
+                  "Ingredient:",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold
+                  ),
+                )
+              : const Text(
+                  "Inhalt:",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+
+              subtitle: (language == 'English') 
+              ? Text(
+                "${typeTranslations[widget.number]}-Dispenser",
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 12
+                ),
+              )
+              : Text(
+                "${typeTranslations[widget.number * 11]}-Dispenser",
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 12
+                ),
+              )
+            ),       
+
+            content: TextField(
+              controller: _textEditingController,
+              cursorColor: Colors.black87,
+              decoration: const InputDecoration(
+                labelText: '',
+                labelStyle: TextStyle(color: Colors.grey),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black87),
+                ),
+              ),
+              onSubmitted: (value) {
+                if (value != '') {
+                  dispenserIngredients[widget.number - 1] = value;
+                } else {
+                  dispenserIngredients[widget.number - 1] = 'Leer';
+                }
+                updater();
+                Navigator.of(context).pop();
               },
             ),
           );
@@ -251,7 +273,7 @@ class _DispenserContentState extends State<DispenserContent> {
           return AlertDialog(
             content: StatefulBuilder(
               // ignore: non_constant_identifier_names
-              builder: (context, SBsetState) {
+              builder: (BuildContext context, StateSetter SBsetState) {
                 return Container(
                   height: MediaQuery.of(context).size.height * 0.35,
                   width: MediaQuery.of(context).size.width * 0.8,
@@ -266,21 +288,30 @@ class _DispenserContentState extends State<DispenserContent> {
                         ListTile(
                           horizontalTitleGap: 0,
                           title: const Text(
-                            "Image:",
+                            "Icon:",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: Colors.black87,
                                 fontSize: 26,
                                 fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(
-                            "${widget.typ}-dispenser",
+                          subtitle: (language == 'English') 
+                          ? Text(
+                            "${typeTranslations[widget.number]}-Dispenser",
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: Colors.red,
-                              fontSize: 16
+                              fontSize: 12
                             ),
-                          ),
+                          )
+                          : Text(
+                            "${typeTranslations[widget.number * 11]}-Dispenser",
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12
+                            ),
+                          )
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.05,
@@ -290,11 +321,11 @@ class _DispenserContentState extends State<DispenserContent> {
                           child: GridView.count(
                             shrinkWrap: true,
                             crossAxisCount: 2,
-                            children: List.generate(6, (index) {
+                            children: List.generate(imageLibrary.length, (index) {
                               return InkWell(
                                 onTap: () {
                                   ingrediantSettings[widget.number] = imageLibrary[index];
-                                  setState(() {});
+                                  updater();
                                   Navigator.of(context).pop();
                                 },
                                 child: SizedBox(
@@ -329,7 +360,7 @@ class _DispenserContentState extends State<DispenserContent> {
         return AlertDialog(
           content: StatefulBuilder(
             // ignore: non_constant_identifier_names
-            builder: (context, SBsetState) {
+            builder: (BuildContext context, StateSetter SBsetState) {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.25,
                 width: MediaQuery.of(context).size.width * 0.8,
@@ -343,8 +374,18 @@ class _DispenserContentState extends State<DispenserContent> {
                     children: [
                       ListTile(
                         horizontalTitleGap: 0,
-                        title: const Text(
-                          "Fill-Level:",
+                        title: (language == 'English') 
+                        ? const Text(
+                          "Fill-level:",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        : const Text(
+                          "Füllstand:",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               color: Colors.black87,
@@ -352,14 +393,23 @@ class _DispenserContentState extends State<DispenserContent> {
                               fontWeight: FontWeight.bold
                             ),
                           ),
-                        subtitle: Text(
-                          "${widget.typ}-dispenser",
+                        subtitle: (language == 'English') 
+                        ? Text(
+                          "${typeTranslations[widget.number]}-Dispenser",
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             color: Colors.red,
-                            fontSize: 16
+                            fontSize: 12
                           ),
-                        ),
+                        )
+                        : Text(
+                          "${typeTranslations[widget.number * 11]}-Dispenser",
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12
+                          ),
+                        )
                       ),
 
                       SizedBox(
@@ -386,7 +436,7 @@ class _DispenserContentState extends State<DispenserContent> {
                           } else {
                             fillStand[widget.number] = fillStand[widget.number];
                           }
-                          setState(() {});
+                          updater();
                           Navigator.of(context).pop();
                         },
                         ),
@@ -448,17 +498,63 @@ class _DispenserContentState extends State<DispenserContent> {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   alignment: Alignment.centerLeft
                 ),
-                child: Text(
-                  dispenserIngredients[widget.number - 1],
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16
-                  ),
-                ),
+
+                child: (widget.number == 1) 
+                ? (language == 'English') 
+                  ? const Text(
+                    'Bread',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16
+                    ),
+                  )
+                  : const Text(
+                    'Brot',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16
+                    ),
+                  )
+                : (dispenserIngredients[widget.number - 1] != 'Leer') 
+                  ? Text(
+                    dispenserIngredients[widget.number - 1],
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16
+                    ),
+                  )
+                  : (language == 'English') 
+                    ? const Text(
+                      'Empty',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16
+                      ),
+                    )
+                    : const Text(
+                      'Leer',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16
+                      ),
+                    )
               ),
-              subtitle: Text(
-                "${widget.typ}-dispenser",
+
+              subtitle: (language == 'English') 
+              ? Text(
+                "${typeTranslations[widget.number]}-Dispenser",
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 12
+                ),
+              ) 
+              : Text(
+                "${typeTranslations[widget.number * 11]}-Dispenser",
                 style: const TextStyle(
                   color: Colors.black87,
                   fontSize: 12
@@ -484,7 +580,7 @@ class _DispenserContentState extends State<DispenserContent> {
         onTap: () {
           changeImage();
         },
-        child: fillStand[widget.number] != 0 && dispenserIngredients[widget.number - 1] != 'Empty'
+        child: fillStand[widget.number] != 0 && dispenserIngredients[widget.number - 1] != 'Leer'
         ? SizedBox(
             height: MediaQuery.of(context).size.height * 0.199,
             child: Image.asset(

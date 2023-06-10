@@ -25,7 +25,7 @@ class FavouriteSandwichesStored extends StatefulWidget {
 
   final String favouriteName;
   final int favouriteIndex;
-  final List<int> favouriteList;
+  final List<dynamic> favouriteList;
   final Function function;
 
   @override
@@ -115,12 +115,20 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                 ]
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 19, right: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Prepare in:',
+                    (language == 'English') 
+                    ? const Text(
+                      'Prepared in:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ) 
+                    : const Text(
+                      'Zubereitet in:',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
@@ -204,7 +212,7 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Container(
-                      margin: const EdgeInsets.only(right: 10, bottom: 10),
+                      margin: const EdgeInsets.only(right: 15, bottom: 10),
                       child: InkWell(
                         onTap: () async {
                           // ignore: unnecessary_null_comparison
@@ -236,7 +244,8 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                                       height: MediaQuery.of(context).size.height * 0.1,
                                       width: MediaQuery.of(context).size.width * 0.7,
                                       child: Center(
-                                        child: RichText(
+                                        child: (language == 'English') 
+                                        ? RichText(
                                           text: const TextSpan(
                                             text: 'WARNING: ',
                                             style: TextStyle(
@@ -252,7 +261,24 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                                               )
                                             ]
                                           ),
-                                        ),
+                                        )
+                                        : RichText(
+                                          text: const TextSpan(
+                                            text: 'WARNUNG: ',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: 'Du bist nicht mit Sandi SM-1200 verbunden.',
+                                                style: TextStyle(
+                                                  color: Colors.black87
+                                                )
+                                              )
+                                            ]
+                                          ),
+                                        )
                                       ),
                                     )
                                   ); 
@@ -269,7 +295,8 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                                       height: MediaQuery.of(context).size.height * 0.1,
                                       width: MediaQuery.of(context).size.width * 0.7,
                                       child: Center(
-                                        child: RichText(
+                                        child: (language == 'English') 
+                                        ? RichText(
                                           text: const TextSpan(
                                             text: 'WARNING: ',
                                             style: TextStyle(
@@ -278,14 +305,31 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                                             ),
                                             children: <TextSpan>[
                                               TextSpan(
-                                                text: 'Your first ingrediant must be bread.',
+                                                text: 'Bread must be the first ingredient.',
                                                 style: TextStyle(
                                                   color: Colors.black87
                                                 )
                                               )
                                             ]
                                           ),
-                                        ),
+                                        )
+                                        : RichText(
+                                          text: const TextSpan(
+                                            text: 'WARNUNG: ',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: 'Brot muss die erste Zutat des Sandwiches sein.',
+                                                style: TextStyle(
+                                                  color: Colors.black87
+                                                )
+                                              )
+                                            ]
+                                          ),
+                                        )
                                       ),
                                     )
                                   ); 
@@ -301,7 +345,8 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                                       height: MediaQuery.of(context).size.height * 0.1,
                                       width: MediaQuery.of(context).size.width * 0.7,
                                       child: Center(
-                                        child: RichText(
+                                        child: (language == 'English') 
+                                        ? RichText(
                                           text: const TextSpan(
                                             text: 'WARNING: ',
                                             style: TextStyle(
@@ -310,14 +355,31 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                                             ),
                                             children: <TextSpan>[
                                               TextSpan(
-                                                text: 'You do not have enough ingrediants.',
+                                                text: 'You do not have enough ingredients.',
                                                 style: TextStyle(
                                                   color: Colors.black87
                                                 )
                                               )
                                             ]
                                           ),
-                                        ),
+                                        ) 
+                                        : RichText(
+                                          text: const TextSpan(
+                                            text: 'WARNUNG: ',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: 'Es sind nicht genügend Zutaten in den Dispensern.',
+                                                style: TextStyle(
+                                                  color: Colors.black87
+                                                )
+                                              )
+                                            ]
+                                          ),
+                                        )
                                       ),
                                     )
                                   ); 
@@ -326,13 +388,21 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                             }
                           } 
                         },
-                        child: const Text(
-                          'Create',
+                        child: (language == 'English') 
+                        ? const Text(
+                          'Prepare',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
                           ),
-                        ),
+                        )
+                        : const Text(
+                          'Fertig',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        )
                       ),
                     ),
                   )

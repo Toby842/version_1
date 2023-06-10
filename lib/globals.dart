@@ -10,6 +10,8 @@ import 'package:flutter_blue/flutter_blue.dart';
 ///string for selected time
 String prepareIn = '0030';
 
+String language = 'English';
+
 ///string for fillstands of sauce-dispensers. Just for working with it
 ///they don´t have to be stored.
 String fillStandSauce1 = '00';
@@ -37,7 +39,7 @@ List<String> favourites = ['Salami', 'Käse'];
 
 ///this is where names are stored. The user setts the names except bread
 ///this must be stored
-List<String> dispenserIngredients = ['Bread', 'Empty', 'Empty', 'Empty'];
+List<String> dispenserIngredients = ['Brot', 'Leer', 'Leer', 'Leer', 'Leer'];
 
 ///this is the list where all the images for the dispenser-rotation-animation
 ///are stored. the user has no access to this list. The list is loaded when the
@@ -55,8 +57,8 @@ List<String> imageLibrary = [
   'assets/ingredients/sauce1.png',
   'assets/ingredients/tomato.png',
   'assets/ingredients/cheese.png',
-  'assets/ingredients/toast.png',
-  'assets/ingredients/sauce1.png',
+  'assets/ingredients/ketchup.png',
+  'assets/ingredients/mayo.png',
 ];
 
 //Maps=========================================================================
@@ -64,9 +66,10 @@ List<String> imageLibrary = [
 ///This must be stored
 Map<int, dynamic> ingrediantSettings = {
   1: 'assets/ingredients/toast.png',
-  2: 'assets/ingredients/sauce1.png',
-  3: 'assets/ingredients/tomato.png',
-  4: 'assets/ingredients/cheese.png',
+  2: 'assets/ingredients/mayo.png',
+  3: 'assets/ingredients/ketchup.png',
+  4: 'assets/ingredients/tomato.png',
+  5: 'assets/ingredients/cheese.png',
 };
 
 ///this map stores the current fill-level for each dispenser
@@ -76,10 +79,12 @@ Map<int, dynamic> fillStand = {
   1: 0,
   ///Dispenser two is meassured in millilitres (SAUCE)
   2: 0,
-  ///Dispenser three - i have no idea how this is meassured (SLICER)
+  ///Dispenser 3 is meassured in millilitres (SAUCE)
   3: 0,
-  ///Dispenser four is meassured in pieces (CHEESE)
+  ///Dispenser four - i have no idea how this is meassured (SLICER)
   4: 0,
+  ///Dispenser five is meassured in pieces (CHEESE)
+  5: 0,
 };
 
 ///copy for keeping fillstand up to date while creating a sandwich
@@ -93,12 +98,32 @@ Map<int, dynamic> fillRefference = {
   ///Dispenser two is meassured in millilitres (SAUCE)
   2: '50 ml',
   22: 50,
+  ///Dispenser three is meassured in millilitres (SAUCE)
+  3: '50 ml',
+  33: 50,
   ///Dispenser three - i have no idea how this is meassured (SLICER)
-  3: '4 pieces',
-  33: 4,
+  4: '4 pieces',
+  44: 4,
   ///Dispenser four is meassured in pieces (CHEESE)
-  4: '8 pieces',
-  44: 8,
+  5: '8 pieces',
+  55: 8,
+};
+
+Map<int, dynamic> typeTranslations = {
+  1: 'Bread',
+  11: 'Brot',
+
+  2: 'Sauce1',
+  22: 'Soße1',
+
+  3: 'Sauce2',
+  33: 'Soße2',
+
+  4: 'Slicer',
+  44: 'Schneide',
+
+  5: 'Cheese',
+  55: 'Käse',
 };
 
 ///Map for favourite sandwiches

@@ -21,7 +21,9 @@ import 'package:version_1/screens/favourite_sandwich.dart';
 
 ///STartScreen is the anchor for the UI of the Start screen. All other functions are impelmented in here that have to do with the Welcome Screen
 class StartScreen extends StatefulWidget {
-  const StartScreen({super.key});
+  const StartScreen({super.key, required this.functioN});
+
+  final Function functioN;
 
   @override
   State<StartScreen> createState() => _StartScreenState();
@@ -31,6 +33,7 @@ class _StartScreenState extends State<StartScreen>{
 
   updateWelcomeScreen() {
     setState(() {});
+    widget.functioN();
   }
 
   @override
@@ -86,7 +89,7 @@ class _StartScreenState extends State<StartScreen>{
                     Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CreateSandwich())); 
+                      builder: (context) => CreateSandwich(function: updateWelcomeScreen))); 
                       newSandwich.clear();
                       newSandwich.add(0);
                       fillStandCopy = Map.from(fillStand);
@@ -101,7 +104,8 @@ class _StartScreenState extends State<StartScreen>{
                             height: MediaQuery.of(context).size.height * 0.1,
                             width: MediaQuery.of(context).size.width * 0.7,
                             child: Center(
-                              child: RichText(
+                              child: (language == 'English') 
+                              ? RichText(
                                 text: const TextSpan(
                                   text: 'WARNING: ',
                                   style: TextStyle(
@@ -110,14 +114,31 @@ class _StartScreenState extends State<StartScreen>{
                                   ),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: 'The bread dispenser is empty.',
+                                      text: 'The bread-dispenser is empty.',
                                       style: TextStyle(
                                         color: Colors.black87
                                       )
                                     )
                                   ]
                                 ),
-                              ),
+                              )
+                              : RichText(
+                                text: const TextSpan(
+                                  text: 'WARNUNG: ',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'Der Brot-Dispenser ist leer.',
+                                      style: TextStyle(
+                                        color: Colors.black87
+                                      )
+                                    )
+                                  ]
+                                ),
+                              )
                             ),
                           )
                         ); 
@@ -125,15 +146,24 @@ class _StartScreenState extends State<StartScreen>{
                     );
                   }
                 },
-                child: const Center(
-                  child: Text(
-                       "New Sandwich",
-                       style: TextStyle(
-                         color: Colors.black87,
-                         fontSize: 15,
-                         fontWeight: FontWeight.bold
-                       ),
-                     ),
+                child: Center(
+                  child: (language == 'English') 
+                  ? const Text(
+                      "New sandwich",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold
+                      ),
+                    )
+                  : const Text(
+                    "Neues Sandwich",
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold
+                    ),
+                  )
                 ),
               ),
             ),
