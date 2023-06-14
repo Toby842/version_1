@@ -93,20 +93,20 @@ Map<int, dynamic> fillStandCopy = {};
 ///this map holds the refference values for the fill-levels in String-format and int-format
 Map<int, dynamic> fillRefference = {
   ///Dispenser one is meassured in pieces (BREAD)
-  1: '20 pieces',
-  11: 20,
+  1: '1 pieces',
+  11: 6,
   ///Dispenser two is meassured in millilitres (SAUCE)
-  2: '50 ml',
-  22: 50,
+  2: '300 ml',
+  22: 300,
   ///Dispenser three is meassured in millilitres (SAUCE)
-  3: '50 ml',
-  33: 50,
+  3: '300 ml',
+  33: 300,
   ///Dispenser three - i have no idea how this is meassured (SLICER)
-  4: '4 pieces',
-  44: 4,
+  4: '1 pieces',
+  44: 1,
   ///Dispenser four is meassured in pieces (CHEESE)
-  5: '8 pieces',
-  55: 8,
+  5: '6 pieces',
+  55: 6 ,
 };
 
 Map<int, dynamic> typeTranslations = {

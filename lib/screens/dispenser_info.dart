@@ -27,9 +27,6 @@ class DispenserInfoState extends State<DispenserInfo> with TickerProviderStateMi
   final PageController _controller = PageController(initialPage: 4);
 
 
-  @override void initState() {
-    super.initState();
-  }
 
   methodA() {
     setState(() {});
@@ -111,6 +108,7 @@ class DispenserInfoState extends State<DispenserInfo> with TickerProviderStateMi
                         },
                       ) 
                     : const SizedBox(),
+
                   ),
                 ),
               )

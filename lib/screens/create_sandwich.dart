@@ -116,11 +116,15 @@ class _CreateSandwichState extends State<CreateSandwich> {
                   );
                 },
 
-                ///ingrediant gets added to newSandwich (List)
+                ///ingrediant gets added to newSandwich (List) + Fillstandcopy gets updated
                 onAccept: (int data) {
                   if (newSandwich.length < 10) {
                     newSandwich.add(data);
-                    fillStandCopy[data + 1] = fillStandCopy[data + 1] - 1;
+                    if (data + 1 == 2 || data + 1 == 3) {
+                      fillStandCopy[data + 1] = fillStandCopy[data + 1] - 15;
+                    } else {
+                      fillStandCopy[data + 1] = fillStandCopy[data + 1] - 1;
+                    }
                     setState(() {});
                   }
                 },
@@ -295,7 +299,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                             }
 
                             fillStandSauce1 = fillStandCopy[2].toString().padLeft(2, '0');
-                            //implement for Sauce2 dispenser
+                            fillStandSauce2 = fillStandCopy[3].toString().padLeft(2, '0');
 
                             fillStand = Map.from(fillStandCopy);
                             for (int i = 0; i < newSandwich.length; i++) {
@@ -309,7 +313,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                             widget.function();
                             // ignore: use_build_context_synchronously
                             Navigator.of(context).pop();
-                            debugPrint(newSandwich.join("") + prepareIn);
+                            debugPrint(newSandwich.join("") + prepareIn + fillStandSauce1 + fillStandSauce2);
                           } 
 
                           ///otherwise the user will get error-Messages:

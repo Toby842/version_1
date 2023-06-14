@@ -42,7 +42,11 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
 
     ///checks if the robot has enough ingrediants for making the sandwich
     for (int i = 0; i < widget.favouriteList.length; i++) {
-      fillStandCopy[widget.favouriteList[i] + 1] -= 1;
+      if (widget.favouriteList[i] + 1 == 2 || widget.favouriteList[i] + 1 == 3) {
+        fillStandCopy[widget.favouriteList[i] + 1] -= 15;
+      } else {
+        fillStandCopy[widget.favouriteList[i] + 1] -= 1;
+      }
       if (fillStandCopy[widget.favouriteList[i] + 1] < 0) {
         fillStandsOkay = false;
         break;
@@ -219,6 +223,7 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                           if (isConnected == true && newSandwich[0] == 0 && fillStandsOkay == true) {
 
                             fillStandSauce1 = fillStandCopy[2].toString().padLeft(2, '0');
+                            fillStandSauce2 = fillStandCopy[3].toString().padLeft(2, '0');
                             //implement for Sauce2 dispenser
 
                             fillStand = Map.from(fillStandCopy);
