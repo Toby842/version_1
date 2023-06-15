@@ -85,7 +85,7 @@ class _StartScreenState extends State<StartScreen>{
               ),
               child: InkWell(
                 onTap: () {
-                  if (fillStand[1] != 0) {
+                  if (fillStand["1"] != 0) {
                     Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -93,7 +93,7 @@ class _StartScreenState extends State<StartScreen>{
                       newSandwich.clear();
                       newSandwich.add(0);
                       fillStandCopy = Map.from(fillStand);
-                      fillStandCopy[1] = fillStandCopy[1] - 1;
+                      fillStandCopy['1'] = fillStandCopy['1'] - 1;
                       prepareIn = '0030';
                   } else {
                     showDialog(
@@ -251,7 +251,7 @@ class FavouriteSandwiches extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FavouriteSandwichesStored(favouriteName: favourites[index_], favouriteIndex: index_, favouriteList: favouritesData[favourites[index_]], function: function,)));
+                    builder: (context) => FavouriteSandwichesStored(favouriteName: favourites[index_.toString()], favouriteIndex: index_, favouriteList: favouritesData[favourites[index_]], function: function,)));
               },
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.09 - 20,

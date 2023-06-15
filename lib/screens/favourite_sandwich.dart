@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
+import 'package:sqflite/sqflite.dart';
 
 
 ///import other files
@@ -43,11 +44,11 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
     ///checks if the robot has enough ingrediants for making the sandwich
     for (int i = 0; i < widget.favouriteList.length; i++) {
       if (widget.favouriteList[i] + 1 == 2 || widget.favouriteList[i] + 1 == 3) {
-        fillStandCopy[widget.favouriteList[i] + 1] -= 15;
+        fillStandCopy[(widget.favouriteList[i] + 1).toString()] -= 15;
       } else {
-        fillStandCopy[widget.favouriteList[i] + 1] -= 1;
+        fillStandCopy[(widget.favouriteList[i] + 1).toString()] -= 1;
       }
-      if (fillStandCopy[widget.favouriteList[i] + 1] < 0) {
+      if (fillStandCopy[(widget.favouriteList[i] + 1).toString()] < 0) {
         fillStandsOkay = false;
         break;
       } else {
@@ -177,10 +178,40 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                   SizedBox(
                     child: ListTile(
                       leading: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           favouritesData.remove(widget.favouriteName);
-                          favourites.removeAt(widget.favouriteIndex);
+                          favourites.remove(widget.favouriteIndex.toString());
+
+                          ///store data
+                          Database database = await openDatabase('sandiSM1200.db');
+                          await database.transaction((txn) async {
+                            final String data = json.encode(favourites);
+                            await txn.rawUpdate(
+                              'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                              [
+                                data,
+                                "favouritesStored",
+                                "favouritesStored",
+                              ]
+                            );
+                          });
+
+                          ///store data
+                          Database database2 = await openDatabase('sandiSM1200.db');
+                          await database2.transaction((txn) async {
+                            final String data = json.encode(favouritesData);
+                            await txn.rawUpdate(
+                              'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                              [
+                                data,
+                                "favouritesIngredientsStored",
+                                "favouritesIngredientsStored",
+                              ]
+                            );
+                          });
+
                           widget.function();
+                          // ignore: use_build_context_synchronously
                           Navigator.of(context).pop();
                         },
                         child: const Icon(
@@ -204,10 +235,7 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
 
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.03,
-                    width: MediaQuery.of(context).size.width * 0.7,
-
-                    ///implement delete-function
-                    
+                    width: MediaQuery.of(context).size.width * 0.7,                    
 
                   ),
 
@@ -227,13 +255,28 @@ class _FavouriteSandwichesStoredState extends State<FavouriteSandwichesStored> {
                             //implement for Sauce2 dispenser
 
                             fillStand = Map.from(fillStandCopy);
+
+                            ///store data
+                            Database database = await openDatabase('sandiSM1200.db');
+                            await database.transaction((txn) async {
+                              final String data = json.encode(fillStand);
+                              await txn.rawUpdate(
+                                'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                                [
+                                  data,
+                                  "fillStandStored",
+                                  "fillStandStored",
+                                ]
+                              );
+                            });
+
                             for (int i = 0; i < newSandwich.length; i++) {
                               newSandwich[i] = newSandwich[i] + 1;
                             }
                             for (int j = newSandwich.length - 1; j < 10; j++) {
                               newSandwich.add(0);
                             }
-                            List<int> bytes = utf8.encode(newSandwich.join("") + prepareIn + fillStandSauce1 + fillStandSauce2);
+                            List<int> bytes = utf8.encode(newSandwich.join("") + prepareIn);
                             await characteristicGloabl.write(bytes, withoutResponse: true);
                             // ignore: use_build_context_synchronously
                             Navigator.of(context).pop();
@@ -441,7 +484,7 @@ class SandwichIngrediants2 extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.1,
       child: Image.asset(
-            ingrediantSettings[index_ + 1],
+            ingrediantSettings[(index_ + 1).toString()],
             fit: BoxFit.contain,
           ),
     );

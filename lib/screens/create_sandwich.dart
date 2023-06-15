@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 import 'dart:convert';
+import 'package:sqflite/sqflite.dart';
 
 ///Import other files:
 import 'package:version_1/globals.dart';
@@ -26,11 +27,17 @@ class _CreateSandwichState extends State<CreateSandwich> {
 
   bool isFavourite = false;
   final _textEditingController = TextEditingController();
+  String potentialFavouriteName = "";
 
   deleteItem(int deleteItem, int indexFillstand) {
     setState(() {
       newSandwich.removeAt(deleteItem);
-      fillStandCopy[indexFillstand + 1] = fillStandCopy[indexFillstand + 1] + 1;
+      if (indexFillstand + 1 == 2 || indexFillstand + 1 == 3) {
+        fillStandCopy[(indexFillstand + 1).toString()] = fillStandCopy[(indexFillstand + 1).toString()] + 15;
+      } else {
+        fillStandCopy[(indexFillstand + 1).toString()] = fillStandCopy[(indexFillstand + 1).toString()] + 1;
+      }
+      
     });
   }
 
@@ -121,9 +128,9 @@ class _CreateSandwichState extends State<CreateSandwich> {
                   if (newSandwich.length < 10) {
                     newSandwich.add(data);
                     if (data + 1 == 2 || data + 1 == 3) {
-                      fillStandCopy[data + 1] = fillStandCopy[data + 1] - 15;
+                      fillStandCopy[(data + 1).toString()] = fillStandCopy[(data + 1).toString()] - 15;
                     } else {
-                      fillStandCopy[data + 1] = fillStandCopy[data + 1] - 1;
+                      fillStandCopy[(data + 1).toString()] = fillStandCopy[(data + 1).toString()] - 1;
                     }
                     setState(() {});
                   }
@@ -216,6 +223,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                           if (isFavourite == false) {
                             isFavourite = true;
                             _textEditingController.text = "";
+                            potentialFavouriteName = "";
                           } else {
                             isFavourite = false;
                           }
@@ -257,24 +265,76 @@ class _CreateSandwichState extends State<CreateSandwich> {
                     height: MediaQuery.of(context).size.height * 0.03,
                     width: MediaQuery.of(context).size.width * 0.7,
                     child: (isFavourite == true) 
-                    ? TextField(
-                      controller: _textEditingController,
-                        cursorColor: Colors.black87,
-                        decoration: const InputDecoration(
-                          labelText: '',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black87),
-                          ),
-                        ),
-                        onSubmitted: (value) {
-
+                    ? Align(
+                      alignment: Alignment.centerLeft,
+                      child: InkWell(
+                        onTap: () {
+                          _textEditingController.text = "";
+                          showDialog(
+                            context: context, 
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: (language == 'English') 
+                                ? const Text(
+                                  "Name your sandwich:",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold),
+                                )
+                                : const Text(
+                                  "Benenne dein Sandwich:",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                content: TextField(
+                                  controller: _textEditingController,
+                                    cursorColor: Colors.black87,
+                                    decoration: const InputDecoration(
+                                      labelText: '',
+                                      labelStyle: TextStyle(color: Colors.grey),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.black),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.black87),
+                                      ),
+                                    ),
+                                    onSubmitted: (value) {
+                                      potentialFavouriteName = value;
+                                      setState(() {
+                                        Navigator.of(context).pop();
+                                      });
+                                    },
+                                ) 
+                              );
+                            }
+                          );
                         },
-                    ) 
-                    : const SizedBox(),
+                        child: RichText(
+                        text: TextSpan(
+                          text: 'Name: ',
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: potentialFavouriteName,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.normal
+                              )
+                            )
+                          ]
+                        ),
+                      ),
+                    ))
+                    : const SizedBox()
                   ),
 
                   const Spacer(),
@@ -293,15 +353,58 @@ class _CreateSandwichState extends State<CreateSandwich> {
                           // ignore: unnecessary_null_comparison
                           if (isConnected == true && newSandwich[0] == 0) {
 
-                            if (isFavourite == true && _textEditingController.text != "" && favourites.contains(_textEditingController.text) == false) {
-                              favourites.add(_textEditingController.text);
-                              favouritesData[_textEditingController.text.toString()] = List.from(newSandwich);
+                            if (isFavourite == true && potentialFavouriteName != "" && favouritesData.containsKey(potentialFavouriteName) == false) {
+                              favourites[favourites.length.toString()] = potentialFavouriteName;
+                              favouritesData[potentialFavouriteName] = List.from(newSandwich);
+
+                              ///store data
+                              Database database = await openDatabase('sandiSM1200.db');
+                              await database.transaction((txn) async {
+                                final String data = json.encode(favourites);
+                                await txn.rawUpdate(
+                                  'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                                  [
+                                    data,
+                                    "favouritesStored",
+                                    "favouritesStored",
+                                  ]
+                                );
+                              });
+
+                              ///store data
+                              Database database2 = await openDatabase('sandiSM1200.db');
+                              await database2.transaction((txn) async {
+                                final String data = json.encode(favouritesData);
+                                await txn.rawUpdate(
+                                  'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                                  [
+                                    data,
+                                    "favouritesIngredientsStored",
+                                    "favouritesIngredientsStored",
+                                  ]
+                                );
+                              });
                             }
 
                             fillStandSauce1 = fillStandCopy[2].toString().padLeft(2, '0');
                             fillStandSauce2 = fillStandCopy[3].toString().padLeft(2, '0');
 
                             fillStand = Map.from(fillStandCopy);
+
+                            ///store data
+                            Database database = await openDatabase('sandiSM1200.db');
+                            await database.transaction((txn) async {
+                              final String data = json.encode(fillStand);
+                              await txn.rawUpdate(
+                                'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                                [
+                                  data,
+                                  "fillStandStored",
+                                  "fillStandStored",
+                                ]
+                              );
+                            });
+
                             for (int i = 0; i < newSandwich.length; i++) {
                               newSandwich[i] = newSandwich[i] + 1;
                             }
@@ -313,7 +416,7 @@ class _CreateSandwichState extends State<CreateSandwich> {
                             widget.function();
                             // ignore: use_build_context_synchronously
                             Navigator.of(context).pop();
-                            debugPrint(newSandwich.join("") + prepareIn + fillStandSauce1 + fillStandSauce2);
+                            debugPrint(newSandwich.join("") + prepareIn);
                           } 
 
                           ///otherwise the user will get error-Messages:
@@ -468,7 +571,7 @@ class DispenserIngredientsUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return fillStandCopy[index_ + 1] != 0 && dispenserIngredients[index_] != 'Leer' ?
+    return fillStandCopy[(index_ + 1).toString()] != 0 && dispenserIngredients[index_.toString()] != 'Leer' ?
 
     ///if everything is fine, the user can drag one ingrediant a time into the drag-target
     Draggable<int>(
@@ -478,7 +581,7 @@ class DispenserIngredientsUI extends StatelessWidget {
       feedback: SizedBox(
       height: MediaQuery.of(context).size.height * 0.08,
       child: Image.asset(
-            ingrediantSettings[index_ + 1],
+            ingrediantSettings[(index_ + 1).toString()],
             fit: BoxFit.contain,
           )
     ),
@@ -502,7 +605,7 @@ class DispenserIngredientsUI extends StatelessWidget {
           child: Center(
             child: (index_ != 0) 
             ? Text(
-              dispenserIngredients[index_],
+              dispenserIngredients[index_.toString()],
               style: TextStyle(
                 color: Colors.black87,
                 fontSize: MediaQuery.of(context).size.height * 0.01,
@@ -548,7 +651,7 @@ class DispenserIngredientsUI extends StatelessWidget {
           child: Center(
             child: (index_ != 0) 
             ? Text(
-              dispenserIngredients[index_],
+              dispenserIngredients[index_.toString()],
               style: TextStyle(
                 color: Colors.black87,
                 fontSize: MediaQuery.of(context).size.height * 0.01,
@@ -601,7 +704,7 @@ class DispenserIngredientsUI extends StatelessWidget {
             ]
           ),
           child: Center(
-            child: (dispenserIngredients[index_] == 'Leer') 
+            child: (dispenserIngredients[index_.toString()] == 'Leer') 
             ? (language == 'English') 
               ? Text(
                 'Empty',
@@ -621,7 +724,7 @@ class DispenserIngredientsUI extends StatelessWidget {
               )
             : (index_ != 0) 
               ? Text(
-                dispenserIngredients[index_],
+                dispenserIngredients[index_.toString()],
                 style: TextStyle(
                   color: Colors.black87,
                   fontSize: MediaQuery.of(context).size.height * 0.01,
@@ -675,7 +778,7 @@ class SandwichIngrediants extends StatelessWidget {
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.1,
         child: Image.asset(
-              ingrediantSettings[index_ + 1],
+              ingrediantSettings[(index_ + 1).toString()],
               fit: BoxFit.contain,
             ),
       ),

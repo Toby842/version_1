@@ -47,9 +47,6 @@ class _AnchorState extends State<Anchor> {
     globalKey.currentState?.methodA();
   }
 
-  ///TODO:
-  ///every data that is stored needs to be fetched here.
-
   @override
   Widget build(BuildContext context) {
     return 

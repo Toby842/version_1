@@ -28,6 +28,12 @@
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Our App uses bluetooth to find, connect and transfer data between different devices</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Exchange data with nearby devices running the database.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_version_1._tcp</string>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

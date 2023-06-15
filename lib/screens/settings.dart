@@ -1,6 +1,8 @@
 //Import Flutter libraries:
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:sqflite/sqflite.dart';
+import 'dart:convert';
 
 //other files:
 import 'package:version_1/globals.dart';
@@ -290,8 +292,23 @@ class _SettingsState extends State<Settings> {
                                 Container(
                                   margin: const EdgeInsets.all(5),
                                   child: InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       language = 'English';
+
+                                      ///store data
+                                      Database database = await openDatabase('sandiSM1200.db');
+                                      await database.transaction((txn) async {
+                                        final String data = json.encode(language);
+                                        await txn.rawUpdate(
+                                          'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                                          [
+                                            data,
+                                            "languageSettings",
+                                            "languageSettings",
+                                          ]
+                                        );
+                                      });
+
                                       setState(() {
                                         widget.function();
                                         Navigator.of(context).pop();
@@ -303,8 +320,23 @@ class _SettingsState extends State<Settings> {
                                 Container(
                                   margin: const EdgeInsets.all(5),
                                   child: InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       language = 'Deutsch';
+
+                                      ///store data
+                                      Database database = await openDatabase('sandiSM1200.db');
+                                      await database.transaction((txn) async {
+                                        final String data = json.encode(language);
+                                        await txn.rawUpdate(
+                                          'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                                          [
+                                            data,
+                                            "languageSettings",
+                                            "languageSettings",
+                                          ]
+                                        );
+                                      });
+
                                       setState(() {
                                         widget.function();
                                         Navigator.of(context).pop();

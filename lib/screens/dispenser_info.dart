@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:imageview360/imageview360.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:string_validator/string_validator.dart';
+//import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'dart:convert';
 
 //Import other files:
 import 'package:version_1/globals.dart';
@@ -127,11 +130,17 @@ class DispenserInfoState extends State<DispenserInfo> with TickerProviderStateMi
                     child: PageView(
                       controller: _controller,
                       physics: const NeverScrollableScrollPhysics(),
+                      // ignore: prefer_const_literals_to_create_immutables
                       children: [
+                        // ignore: prefer_const_constructors
                         DispenserContent(number: 2,  editable: true,),
+                        // ignore: prefer_const_constructors
                         DispenserContent(number: 3,  editable: true,),
+                        // ignore: prefer_const_constructors
                         DispenserContent(number: 4,  editable: true,),
+                        // ignore: prefer_const_constructors
                         DispenserContent(number: 5,  editable: true,),
+                        // ignore: prefer_const_constructors
                         DispenserContent(number: 1,  editable: false,),
                       ],
                     ),
@@ -215,7 +224,7 @@ class _DispenserContentState extends State<DispenserContent> {
 
               subtitle: (language == 'English') 
               ? Text(
-                "${typeTranslations[widget.number]}-Dispenser",
+                "${typeTranslations[(widget.number).toString()]}-Dispenser",
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: Colors.red,
@@ -223,7 +232,7 @@ class _DispenserContentState extends State<DispenserContent> {
                 ),
               )
               : Text(
-                "${typeTranslations[widget.number * 11]}-Dispenser",
+                "${typeTranslations[(widget.number * 11).toString()]}-Dispenser",
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: Colors.red,
@@ -245,13 +254,29 @@ class _DispenserContentState extends State<DispenserContent> {
                 borderSide: BorderSide(color: Colors.black87),
                 ),
               ),
-              onSubmitted: (value) {
+              onSubmitted: (value) async {
                 if (value != '') {
-                  dispenserIngredients[widget.number - 1] = value;
+                  dispenserIngredients[(widget.number - 1).toString()] = value;
                 } else {
-                  dispenserIngredients[widget.number - 1] = 'Leer';
+                  dispenserIngredients[(widget.number - 1).toString()] = 'Leer';
                 }
+
+                ///store data
+                Database database = await openDatabase('sandiSM1200.db');
+                await database.transaction((txn) async {
+                  final String data = json.encode(dispenserIngredients);
+                  await txn.rawUpdate(
+                    'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                    [
+                      data,
+                      "dispenserIngredientsStored",
+                      "dispenserIngredientsStored",
+                    ]
+                  );
+                });
+
                 updater();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
             ),
@@ -295,7 +320,7 @@ class _DispenserContentState extends State<DispenserContent> {
                           ),
                           subtitle: (language == 'English') 
                           ? Text(
-                            "${typeTranslations[widget.number]}-Dispenser",
+                            "${typeTranslations[(widget.number).toString()]}-Dispenser",
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: Colors.red,
@@ -303,7 +328,7 @@ class _DispenserContentState extends State<DispenserContent> {
                             ),
                           )
                           : Text(
-                            "${typeTranslations[widget.number * 11]}-Dispenser",
+                            "${typeTranslations[(widget.number * 11).toString()]}-Dispenser",
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: Colors.red,
@@ -321,9 +346,25 @@ class _DispenserContentState extends State<DispenserContent> {
                             crossAxisCount: 2,
                             children: List.generate(imageLibrary.length, (index) {
                               return InkWell(
-                                onTap: () {
-                                  ingrediantSettings[widget.number] = imageLibrary[index];
+                                onTap: () async {
+                                  ingrediantSettings[(widget.number).toString()] = imageLibrary[index];
+
+                                  ///store data
+                                  Database database = await openDatabase('sandiSM1200.db');
+                                  await database.transaction((txn) async {
+                                    final String data = json.encode(ingrediantSettings);
+                                    await txn.rawUpdate(
+                                      'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                                      [
+                                        data,
+                                        "ingredientSettingsStored",
+                                        "ingredientSettingsStored",
+                                      ]
+                                    );
+                                  });
+
                                   updater();
+                                  // ignore: use_build_context_synchronously
                                   Navigator.of(context).pop();
                                 },
                                 child: SizedBox(
@@ -393,7 +434,7 @@ class _DispenserContentState extends State<DispenserContent> {
                           ),
                         subtitle: (language == 'English') 
                         ? Text(
-                          "${typeTranslations[widget.number]}-Dispenser",
+                          "${typeTranslations[(widget.number).toString()]}-Dispenser",
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             color: Colors.red,
@@ -401,7 +442,7 @@ class _DispenserContentState extends State<DispenserContent> {
                           ),
                         )
                         : Text(
-                          "${typeTranslations[widget.number * 11]}-Dispenser",
+                          "${typeTranslations[(widget.number * 11).toString()]}-Dispenser",
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             color: Colors.red,
@@ -419,7 +460,7 @@ class _DispenserContentState extends State<DispenserContent> {
                           controller: _textEditingController2,
                           cursorColor: Colors.black87,
                           decoration: InputDecoration(
-                            labelText: '${fillStand[widget.number].toString()} / ${fillRefference[widget.number]}',
+                            labelText: '${fillStand[(widget.number).toString()].toString()} / ${fillRefference[(widget.number).toString()]}',
                             labelStyle: const TextStyle(color: Colors.grey),
                             enabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
@@ -428,13 +469,29 @@ class _DispenserContentState extends State<DispenserContent> {
                             borderSide: BorderSide(color: Colors.black87),
                             ),
                         ),
-                        onSubmitted: (value) {
+                        onSubmitted: (value) async {
                           if (value != '' && isNumeric(value)) {
-                            fillStand[widget.number] = int.parse(value);
+                            fillStand[(widget.number).toString()] = int.parse(value);
                           } else {
-                            fillStand[widget.number] = fillStand[widget.number];
+                            fillStand[(widget.number).toString()] = fillStand[widget.number];
                           }
+
+                          ///store data
+                          Database database = await openDatabase('sandiSM1200.db');
+                          await database.transaction((txn) async {
+                            final String data = json.encode(fillStand);
+                            await txn.rawUpdate(
+                              'UPDATE sandiSM1200 SET aMap = ?, key1 = ? WHERE key1 = ?',
+                              [
+                                data,
+                                "fillStandStored",
+                                "fillStandStored",
+                              ]
+                            );
+                          });
+
                           updater();
+                          // ignore: use_build_context_synchronously
                           Navigator.of(context).pop();
                         },
                         ),
@@ -442,7 +499,7 @@ class _DispenserContentState extends State<DispenserContent> {
                           radius: 16,
                           lineWidth: 5,
                           animation: true,
-                          percent: fillStand[widget.number] / fillRefference[widget.number * 11],
+                          percent: fillStand[(widget.number).toString()] / fillRefference[(widget.number * 11).toString()],
                           circularStrokeCap: CircularStrokeCap.round,
                           progressColor: Colors.red,
                         ),
@@ -515,9 +572,9 @@ class _DispenserContentState extends State<DispenserContent> {
                       fontSize: 16
                     ),
                   )
-                : (dispenserIngredients[widget.number - 1] != 'Leer') 
+                : (dispenserIngredients[(widget.number - 1).toString()] != 'Leer') 
                   ? Text(
-                    dispenserIngredients[widget.number - 1],
+                    dispenserIngredients[(widget.number - 1).toString()],
                     style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
@@ -545,14 +602,14 @@ class _DispenserContentState extends State<DispenserContent> {
 
               subtitle: (language == 'English') 
               ? Text(
-                "${typeTranslations[widget.number]}-Dispenser",
+                "${typeTranslations[(widget.number).toString()]}-Dispenser",
                 style: const TextStyle(
                   color: Colors.black87,
                   fontSize: 12
                 ),
               ) 
               : Text(
-                "${typeTranslations[widget.number * 11]}-Dispenser",
+                "${typeTranslations[(widget.number * 11).toString()]}-Dispenser",
                 style: const TextStyle(
                   color: Colors.black87,
                   fontSize: 12
@@ -566,7 +623,9 @@ class _DispenserContentState extends State<DispenserContent> {
                   radius: MediaQuery.of(context).size.height * 0.04 * 0.5,
                   lineWidth: 5,
                   animation: true,
-                  percent: fillStand[widget.number] / fillRefference[widget.number * 11],
+                  percent: (fillStand[(widget.number).toString()] == null) 
+                  ? 0 / fillRefference[(widget.number).toString()]
+                  : fillStand[(widget.number).toString()] / fillRefference[(widget.number * 11).toString()],
                   circularStrokeCap: CircularStrokeCap.round,
                   progressColor: Colors.red,
                 ),
@@ -578,11 +637,11 @@ class _DispenserContentState extends State<DispenserContent> {
         onTap: () {
           changeImage();
         },
-        child: fillStand[widget.number] != 0 && dispenserIngredients[widget.number - 1] != 'Leer'
+        child: fillStand[(widget.number).toString()] != 0 && dispenserIngredients[(widget.number - 1).toString()] != 'Leer'
         ? SizedBox(
             height: MediaQuery.of(context).size.height * 0.199,
             child: Image.asset(
-              ingrediantSettings[widget.number],
+              ingrediantSettings[(widget.number).toString()],
               fit: BoxFit.contain,
             ),
           )
@@ -591,7 +650,7 @@ class _DispenserContentState extends State<DispenserContent> {
             child: Stack(
               children: [
                 Image.asset(
-                  ingrediantSettings[widget.number],
+                  ingrediantSettings[(widget.number).toString()],
                   fit: BoxFit.contain,
                   color: Colors.grey.withOpacity(0.4),
                 ),
