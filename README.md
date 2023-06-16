@@ -13,10 +13,12 @@ To install the App, follow these steps:
 
 1. Download Flutter and XCode
 if you run 'flutter doctor' in your terminal, you should see checkmarks at 
-=> Flutter
-=> XCode
-=> Connected Device
-=> HTTP Host Availability
+=> Flutter;
+=> XCode;
+=> Connected Device;
+=> HTTP Host Availability;
+
+(https://www.youtube.com/watch?v=JJwBoRMY08U) link for YT-Tutorial
 
 2. Clone the GitHub-Repository
 

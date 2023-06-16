@@ -234,7 +234,7 @@ class FavouriteSandwiches extends StatelessWidget {
                 title: Transform.translate(
                   offset: const Offset(-30, 0),
                   child: Text(
-                    favourites[index_],
+                    favourites[index_.toString()],
                     style: TextStyle(
                       fontSize: MediaQuery.of(context).size.height * 0.014,
                       fontWeight: FontWeight.bold,
@@ -251,7 +251,7 @@ class FavouriteSandwiches extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FavouriteSandwichesStored(favouriteName: favourites[index_.toString()], favouriteIndex: index_, favouriteList: favouritesData[favourites[index_]], function: function,)));
+                    builder: (context) => FavouriteSandwichesStored(favouriteName: favourites[index_.toString()], favouriteIndex: index_, favouriteList: favouritesData[favourites[index_.toString()]], function: function,)));
               },
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.09 - 20,
