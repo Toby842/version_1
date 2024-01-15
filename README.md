@@ -11,29 +11,33 @@ This App was optimized for iOS. It might also run on Android, but we did not tes
 
 To install the App, follow these steps:
 
-1. Download Flutter and XCode
-if you run 'flutter doctor' in your terminal, you should see checkmarks at 
+1. Download Flutter and XCode.
+If you run 'flutter doctor' in your terminal, you should see checkmarks at 
+
 => Flutter;
+
 => XCode;
+
 => Connected Device;
+
 => HTTP Host Availability;
 
 (https://www.youtube.com/watch?v=JJwBoRMY08U) link for YT-Tutorial
 
 2. Clone the GitHub-Repository
 
-3. Open the Flutter-Project
-run 'flutter clean' in the Terminal of the Project
-run 'flutter pub get' to install all the packages that are needed
+3. Open the Flutter-Project:
+run 'flutter clean' in the Terminal of the Project.
+run 'flutter pub get' to install all the packages that are needed.
 
-4. Open Runner.xcworkspace in XCode
-you can find Runner.xcworkspace in the ios-folder of the Project
+4. Open Runner.xcworkspace in XCode:
+you can find Runner.xcworkspace in the ios-folder of the Project.
 
 5. Setup Device
-In XCode select the device (iPhone or iPad or Simulator), you want to run the App on. You can find the options for that
+In XCode select the device (iPhone or iPad or Simulator) you want to run the App on. You can find the options for that
 at the top center of the XCode window.
-Select, if you want to run the App in Release Mode or Debug Mode. Click therefor on Runner (left to where you set your device), then 
-on Edit Scheme, then select your Build Configurations. Note that Release Mode will probably only work on real devices. 
+Select, if you want to run the App in Release Mode or Debug Mode. Click on "Runner" (left to where you set your device), then 
+on Edit Scheme, then select your Build-Configuration. Note that Release Mode will probably only work on real devices. 
 
 6. Run
 
